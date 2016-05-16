@@ -2,7 +2,7 @@
  * @author Adrian Rodriguez Bazaga, Eleazar Diaz Delgado
  * @version 1.0.0
  * @date 19 May 2016
- * @email Adrián: alu0100826456@ull.edu.es / arodriba@ull.edu.es | Eleazar: eleazardzdo@gmail.com
+ * @email Adriï¿½n: alu0100826456@ull.edu.es / arodriba@ull.edu.es | Eleazar: eleazardzdo@gmail.com
  * @subject Inteligencia Artificial Avanzada (Advanced Artificial Intelligence)
  * @title Assignment 6 - Classification using Natural Language Processing
  */
@@ -16,7 +16,7 @@ public class Main {
     // Create the classification object
     Classifier classifier = new Classifier();
     // Create the initial corpus (duplicated texts included)
-    classifier.setCorpus(FileParser.parseCorpus("C:\\Users\\QiCanarias23\\workspace\\es.ull.esit.iaa.pln.clasificacion\\resources\\corpustodo.txt"));
+    classifier.setCorpus(FileParser.parseCorpus("corpustodo.txt"));
     // Create the unique corpus (removing duplicated texts)
     classifier.createUniqueCorpus();
     

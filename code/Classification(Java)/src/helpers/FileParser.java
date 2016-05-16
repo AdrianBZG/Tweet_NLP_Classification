@@ -2,7 +2,7 @@
  * @author Adrian Rodriguez Bazaga, Eleazar Diaz Delgado
  * @version 1.0.0
  * @date 19 May 2016
- * @email Adrián: alu0100826456@ull.edu.es / arodriba@ull.edu.es | Eleazar: eleazardzdo@gmail.com
+ * @email Adriï¿½n: alu0100826456@ull.edu.es / arodriba@ull.edu.es | Eleazar: eleazardzdo@gmail.com
  * @subject Inteligencia Artificial Avanzada (Advanced Artificial Intelligence)
  * @title Assignment 6 - Classification using Natural Language Processing
  */
@@ -10,15 +10,15 @@
 package helpers;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import javafx.util.Pair;
 
 public class FileParser {  
   public static ArrayList<String> parseCorpus(String fileName) {
-    try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+    try(BufferedReader br = new BufferedReader(new InputStreamReader(FileParser.class.getResourceAsStream(fileName)))) {
       ArrayList<String> listToReturn = new ArrayList<String>();
       for(String line; (line = br.readLine()) != null; ) {
         listToReturn.add(removeUnwantedText(line));
@@ -26,13 +26,13 @@ public class FileParser {
       return listToReturn;
     } catch (IOException e) {
       System.out.println(e.getMessage());
-    }    
+    }
     return null;
   }
   
   private static String removeUnwantedText(String initialText) {
     String textToReturn = "";
-    String[] parts = initialText.split(" |\\.\\.\\.");
+    String[] parts = initialText.split(" |\\.\\.\\.");    // Split by spaces or ...
     
     // Remove unwanted parts
     for(String word : parts) {
@@ -47,7 +47,12 @@ public class FileParser {
         textToReturn += word.toLowerCase() + " ";
       }
     }
-   
+    
+    // Remove unwanted spaces, tabs and b's
+    textToReturn.replaceAll("^\\s+", "");
+    textToReturn.replaceAll("^\\t+ ", "");
+    textToReturn.replaceAll(" ", "");
+    
     return textToReturn;
   }
   
@@ -66,7 +71,7 @@ public class FileParser {
   }
   
   public static ArrayList<Pair<String, Float>> parseProbFile(String fileName) {
-    try(BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+    try(BufferedReader br = new BufferedReader(new InputStreamReader(FileParser.class.getResourceAsStream(fileName)))) {
       int lineCount = 0;
       ArrayList<Pair<String, Float>> arrayToReturn = new ArrayList<Pair<String, Float>>();
       for(String line; (line = br.readLine()) != null; ) {
