@@ -114,9 +114,14 @@ public class Classifier {
     } catch (IOException e) {
       System.out.println(e.getMessage());
     }
+    
+    final double RELEVANT_ACCURACY = (relProbCount / 4654.0);
+    final double NOT_RELEVANT_ACCURACY = (nRelProbCount / 7975.0);
 
     System.out.println("Textos clasificados como relevantes: " + relProbCount);
-    System.out.println("Textos clasfiicados como no relevantes: " + nRelProbCount);
+    System.out.println("Textos clasificados como no relevantes: " + nRelProbCount);
+    System.out.println("Tamaño del corpus único: " + getUniqueCorpus().size());
+    System.out.println("\n-- Precisiones de clasificación --\n" + "Precision de Relevantes: " + (int)(RELEVANT_ACCURACY * 100) + "% (" + RELEVANT_ACCURACY + ")\nPrecision de No Relevantes: " + (int)(NOT_RELEVANT_ACCURACY * 100) + "% (" + NOT_RELEVANT_ACCURACY + ")");
   }
 
   public void showCorpus() {
@@ -146,7 +151,7 @@ public class Classifier {
     for(Pair<String,Float> pair : pairs) {
       getRelWordProbs().put(pair.getKey(), pair.getValue());
     }
-    //System.out.println("Probabilidades relevantes: " + getRelWordProbs().size());
+    System.out.println("Probabilidades relevantes: " + getRelWordProbs().size());
   }
 
   public void getNrelProbOfWords() {
@@ -154,7 +159,7 @@ public class Classifier {
     for(Pair<String,Float> pair : pairs) {
       getNotRelWordProbs().put(pair.getKey(), pair.getValue());
     }
-    //System.out.println("Probabilidades no relevantes: " + getNotRelWordProbs().size());
+    System.out.println("Probabilidades no relevantes: " + getNotRelWordProbs().size());
   }
 
   public Map<String, Float> getRelWordProbs() {
