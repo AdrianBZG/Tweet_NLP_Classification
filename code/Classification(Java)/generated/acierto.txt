@@ -1,0 +1,2 @@
+Precision de Relevantes: 65% (0.6585732703051139)
+Precision de No Relevantes: 80% (0.8007523510971787)
