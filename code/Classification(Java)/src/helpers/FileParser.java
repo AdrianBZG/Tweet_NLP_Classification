@@ -32,7 +32,7 @@ public class FileParser {
   
   private static String removeUnwantedText(String initialText) {
     String textToReturn = "";
-    String[] parts = initialText.split(" |\\.\\.\\.");    // Split by spaces or ...
+    String[] parts = initialText.split(" ");    // Split by spaces or ...
     
     // Remove unwanted parts
     for(String word : parts) {
@@ -48,16 +48,11 @@ public class FileParser {
       }
     }
     
-    // Remove unwanted spaces, tabs and b's
-    textToReturn.replaceAll("^\\s+", "");
-    textToReturn.replaceAll("^\\t+ ", "");
-    textToReturn.replaceAll(" ", "");
-    
     return textToReturn;
   }
   
-  private static Pair<String, Float> getProbPair(String initialText) {
-    Pair<String, Float> pairToReturn;
+  private static Pair<String, Double> getProbPair(String initialText) {
+    Pair<String, Double> pairToReturn;
     String[] parts = initialText.split(" |:");
     
     parts[0] = parts[1];
@@ -65,15 +60,15 @@ public class FileParser {
     
     //System.out.println("Palabra: " + parts[0] + " Probabilidad: " + parts[1]);
     
-    pairToReturn = new Pair<String, Float>((String)parts[0], new Float(parts[1]));
+    pairToReturn = new Pair<String, Double>((String)parts[0], new Double(parts[1]));
    
     return pairToReturn;
   }
   
-  public static ArrayList<Pair<String, Float>> parseProbFile(String fileName) {
+  public static ArrayList<Pair<String, Double>> parseProbFile(String fileName) {
     try(BufferedReader br = new BufferedReader(new InputStreamReader(FileParser.class.getResourceAsStream(fileName)))) {
       int lineCount = 0;
-      ArrayList<Pair<String, Float>> arrayToReturn = new ArrayList<Pair<String, Float>>();
+      ArrayList<Pair<String, Double>> arrayToReturn = new ArrayList<Pair<String, Double>>();
       for(String line; (line = br.readLine()) != null; ) {
         lineCount++;
         if(lineCount > 2) {

@@ -27,8 +27,8 @@ import javafx.util.Pair;
 public class Classifier {
   private ArrayList<String> corpus;
   List<String> uniqueCorpus; 
-  private Map<String, Float> relWordProbs = new TreeMap<String, Float>();
-  private Map<String, Float> notRelWordProbs = new TreeMap<String, Float>();
+  private Map<String, Double> relWordProbs = new TreeMap<String, Double>();
+  private Map<String, Double> notRelWordProbs = new TreeMap<String, Double>();
 
   public Classifier() {   
     setCorpus(new ArrayList<String>());
@@ -57,16 +57,14 @@ public class Classifier {
   }
 
   public void classifyText() {
-    Float relProbAccum = new Float(0);
-    Float nRelProbAccum = new Float(0);
-    int relProbCount = 0;
-    int nRelProbCount = 0;
+    Double relProbAccum = new Double(0);
+    Double nRelProbAccum = new Double(0);
+    double relProbCount = 0;
+    double nRelProbCount = 0;
     BufferedWriter bw = null;        // Buffered writer used for the output file
     
     // Remove two first elements of the corpus (they're just info, not text)
-    List<String> usedCorpus = getUniqueCorpus();
-    usedCorpus.remove(0);
-    usedCorpus.remove(0);
+    List<String> usedCorpus = getCorpus();
 
     try {
       File fout = new File("generated/clasificacion.txt");
@@ -77,7 +75,7 @@ public class Classifier {
         String[] textWords = temp.split(" ");
         for(String word : textWords) {
           // Relevant probability
-          Float probability = getRelWordProbs().get(word);
+          Double probability = getRelWordProbs().get(word);
           if(probability != null) {
             relProbAccum += probability;
           }
@@ -92,19 +90,19 @@ public class Classifier {
         try {
           if(relProbAccum > nRelProbAccum) {
             relProbCount++;
-            bw.write("Clase:rel" + "\t\t" + "Texto:" + temp);
+            bw.write("Clase:rel" + " " + "Texto:" + temp);
             bw.newLine();
           } else {
             nRelProbCount++;
-            bw.write("Clase:nrel" + "\t" + "Texto:" + temp);
+            bw.write("Clase:nrel" + " " + "Texto:" + temp);
             bw.newLine();
           }
         } catch (IOException e) {
           System.out.println(e.getMessage());
         }
         // Reset for next iteration
-        relProbAccum = new Float(0);
-        nRelProbAccum = new Float(0);
+        relProbAccum = new Double(0);
+        nRelProbAccum = new Double(0);
       }
 
       // Close the output file
@@ -120,7 +118,7 @@ public class Classifier {
 
     System.out.println("Textos clasificados como relevantes: " + relProbCount);
     System.out.println("Textos clasificados como no relevantes: " + nRelProbCount);
-    System.out.println("Tamaño del corpus único: " + getUniqueCorpus().size());
+    System.out.println("Tamaño del corpus: " + getCorpus().size());
     System.out.println("\n-- Precisiones de clasificación --\n" + "Precision de Relevantes: " + (int)(RELEVANT_ACCURACY * 100) + "% (" + RELEVANT_ACCURACY + ")\nPrecision de No Relevantes: " + (int)(NOT_RELEVANT_ACCURACY * 100) + "% (" + NOT_RELEVANT_ACCURACY + ")");
   }
 
@@ -147,34 +145,34 @@ public class Classifier {
   }
 
   public void getRelProbOfWords() {
-    ArrayList<Pair<String, Float>> pairs = FileParser.parseProbFile("corpusrel.txtlearn");
-    for(Pair<String,Float> pair : pairs) {
+    ArrayList<Pair<String, Double>> pairs = FileParser.parseProbFile("corpusrel.txtlearn");
+    for(Pair<String,Double> pair : pairs) {
       getRelWordProbs().put(pair.getKey(), pair.getValue());
     }
     System.out.println("Probabilidades relevantes: " + getRelWordProbs().size());
   }
 
   public void getNrelProbOfWords() {
-    ArrayList<Pair<String, Float>> pairs = FileParser.parseProbFile("corpusnrel.txtlearn");
-    for(Pair<String,Float> pair : pairs) {
+    ArrayList<Pair<String, Double>> pairs = FileParser.parseProbFile("corpusnrel.txtlearn");
+    for(Pair<String,Double> pair : pairs) {
       getNotRelWordProbs().put(pair.getKey(), pair.getValue());
     }
     System.out.println("Probabilidades no relevantes: " + getNotRelWordProbs().size());
   }
 
-  public Map<String, Float> getRelWordProbs() {
+  public Map<String, Double> getRelWordProbs() {
     return relWordProbs;
   }
 
-  public void setRelWordProbs(Map<String, Float> relWordProbs) {
+  public void setRelWordProbs(Map<String, Double> relWordProbs) {
     this.relWordProbs = relWordProbs;
   }
 
-  public Map<String, Float> getNotRelWordProbs() {
+  public Map<String, Double> getNotRelWordProbs() {
     return notRelWordProbs;
   }
 
-  public void setNotRelWordProbs(Map<String, Float> notRelWordProbs) {
+  public void setNotRelWordProbs(Map<String, Double> notRelWordProbs) {
     this.notRelWordProbs = notRelWordProbs;
   }
 }
