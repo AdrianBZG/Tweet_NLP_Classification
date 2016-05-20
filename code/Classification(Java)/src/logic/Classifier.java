@@ -26,7 +26,9 @@ import javafx.util.Pair;
 
 public class Classifier {
   private ArrayList<String> corpus;
-  List<String> uniqueCorpus; 
+  private List<String> uniqueCorpus;
+  private ArrayList<String> relevantCorpus;
+  private ArrayList<String> notRelevantCorpus;
   private Map<String, Double> relWordProbs = new TreeMap<String, Double>();
   private Map<String, Double> notRelWordProbs = new TreeMap<String, Double>();
 
@@ -59,11 +61,12 @@ public class Classifier {
   public void classifyText() {
     Double relProbAccum = new Double(0);
     Double nRelProbAccum = new Double(0);
-    double relProbCount = 0;
-    double nRelProbCount = 0;
+    int relProbCount = 0;
+    int nRelProbCount = 0;
+    int correctlyClassifiedRelTexts = 0;
+    int correctlyClassifiedNotRelTexts = 0;
     BufferedWriter bw = null;        // Buffered writer used for the output file
-    
-    // Remove two first elements of the corpus (they're just info, not text)
+
     List<String> usedCorpus = getCorpus();
 
     try {
@@ -90,10 +93,16 @@ public class Classifier {
         try {
           if(relProbAccum > nRelProbAccum) {
             relProbCount++;
+            if(getRelevantCorpus().contains(temp)) {
+              correctlyClassifiedRelTexts++;
+            }
             bw.write("Clase:rel" + " " + "Texto:" + temp);
             bw.newLine();
           } else {
             nRelProbCount++;
+            if(getNotRelevantCorpus().contains(temp)) {
+              correctlyClassifiedNotRelTexts++;
+            }
             bw.write("Clase:nrel" + " " + "Texto:" + temp);
             bw.newLine();
           }
@@ -113,12 +122,15 @@ public class Classifier {
       System.out.println(e.getMessage());
     }
     
-    final double RELEVANT_ACCURACY = (relProbCount / 4654.0);
-    final double NOT_RELEVANT_ACCURACY = (nRelProbCount / 7975.0);
+    final double RELEVANT_ACCURACY = (correctlyClassifiedRelTexts / 4654.0);
+    final double NOT_RELEVANT_ACCURACY = (correctlyClassifiedNotRelTexts / 6152.0);
 
+    System.out.println("Tamaño del corpus: " + getCorpus().size());
+    System.out.println("Textos relevantes: " + getRelevantCorpus().size() + ", Textos no relevantes: " + getNotRelevantCorpus().size());
     System.out.println("Textos clasificados como relevantes: " + relProbCount);
     System.out.println("Textos clasificados como no relevantes: " + nRelProbCount);
-    System.out.println("Tamaño del corpus: " + getCorpus().size());
+    System.out.println("Textos clasificados CORRECTAMENTE como relevantes: " + correctlyClassifiedRelTexts);
+    System.out.println("Textos clasificados CORRECTAMENTE como no relevantes: " + correctlyClassifiedNotRelTexts);
     System.out.println("\n-- Precisiones de clasificación --\n" + "Precision de Relevantes: " + (int)(RELEVANT_ACCURACY * 100) + "% (" + RELEVANT_ACCURACY + ")\nPrecision de No Relevantes: " + (int)(NOT_RELEVANT_ACCURACY * 100) + "% (" + NOT_RELEVANT_ACCURACY + ")");
     // Precision global
     System.out.println("Precisión global: " + ((int)(NOT_RELEVANT_ACCURACY * 100) + (int)(RELEVANT_ACCURACY * 100)) / 2 + "%");
@@ -148,18 +160,18 @@ public class Classifier {
 
   public void getRelProbOfWords() {
     ArrayList<Pair<String, Double>> pairs = FileParser.parseProbFile("corpusrel.txtlearn");
-    for(Pair<String,Double> pair : pairs) {
+    for(Pair<String, Double> pair : pairs) {
       getRelWordProbs().put(pair.getKey(), pair.getValue());
     }
-    System.out.println("Probabilidades relevantes: " + getRelWordProbs().size());
+    //System.out.println("Probabilidades relevantes: " + getRelWordProbs().size());
   }
 
   public void getNrelProbOfWords() {
     ArrayList<Pair<String, Double>> pairs = FileParser.parseProbFile("corpusnrel.txtlearn");
-    for(Pair<String,Double> pair : pairs) {
+    for(Pair<String, Double> pair : pairs) {
       getNotRelWordProbs().put(pair.getKey(), pair.getValue());
     }
-    System.out.println("Probabilidades no relevantes: " + getNotRelWordProbs().size());
+    //System.out.println("Probabilidades no relevantes: " + getNotRelWordProbs().size());
   }
 
   public Map<String, Double> getRelWordProbs() {
@@ -176,5 +188,21 @@ public class Classifier {
 
   public void setNotRelWordProbs(Map<String, Double> notRelWordProbs) {
     this.notRelWordProbs = notRelWordProbs;
+  }
+
+  public ArrayList<String> getRelevantCorpus() {
+    return relevantCorpus;
+  }
+
+  public void setRelevantCorpus(ArrayList<String> relevantCorpus) {
+    this.relevantCorpus = relevantCorpus;
+  }
+
+  public ArrayList<String> getNotRelevantCorpus() {
+    return notRelevantCorpus;
+  }
+
+  public void setNotRelevantCorpus(ArrayList<String> notRelevantCorpus) {
+    this.notRelevantCorpus = notRelevantCorpus;
   }
 }

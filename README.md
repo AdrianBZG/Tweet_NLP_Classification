@@ -1,3 +1,1 @@
-# NPL_Text_Classification
-... Unfinished README ...
-Text classification using Natural Language Processing. Subject: Advanced Artificial Intelligence
+# Unfinished README

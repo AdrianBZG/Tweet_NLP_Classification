@@ -17,6 +17,8 @@ public class Main {
     Classifier classifier = new Classifier();
     // Create the initial corpus (duplicated texts included)
     classifier.setCorpus(FileParser.parseCorpus("corpustodo.txt"));
+    classifier.setRelevantCorpus(FileParser.parseCorpus("corpusrel.txt"));
+    classifier.setNotRelevantCorpus(FileParser.parseCorpus("corpusnrel.txt"));
     // Create the unique corpus (removing duplicated texts)
     classifier.createUniqueCorpus();
     

@@ -36,7 +36,7 @@ public class FileParser {
     
     // Remove unwanted parts
     for(String word : parts) {
-      if(word.startsWith("#") || word.startsWith("Texto:") || word.startsWith("http") || word.startsWith("(Vine") || word.startsWith("via") || word.startsWith("@") || word.startsWith(")")) {
+      if(word.startsWith("Texto:") || word.startsWith("(Vine") || word.startsWith("via") || word.startsWith("@") || word.startsWith(")")) {
         word = "";
         if(word.endsWith(" ")) {
           word = word.replace(word.substring(word.length()-1), "");
