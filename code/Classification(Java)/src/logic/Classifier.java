@@ -120,6 +120,8 @@ public class Classifier {
     System.out.println("Textos clasificados como no relevantes: " + nRelProbCount);
     System.out.println("Tamaño del corpus: " + getCorpus().size());
     System.out.println("\n-- Precisiones de clasificación --\n" + "Precision de Relevantes: " + (int)(RELEVANT_ACCURACY * 100) + "% (" + RELEVANT_ACCURACY + ")\nPrecision de No Relevantes: " + (int)(NOT_RELEVANT_ACCURACY * 100) + "% (" + NOT_RELEVANT_ACCURACY + ")");
+    // Precision global
+    System.out.println("Precisión global: " + ((int)(NOT_RELEVANT_ACCURACY * 100) + (int)(RELEVANT_ACCURACY * 100)) / 2 + "%");
   }
 
   public void showCorpus() {

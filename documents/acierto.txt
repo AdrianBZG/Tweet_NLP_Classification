@@ -1,0 +1,3 @@
+Precision de Relevantes: 81% (0.812204555221315)
+Precision de No Relevantes: 88% (0.8810031347962383)
+Precisión global: 84%
