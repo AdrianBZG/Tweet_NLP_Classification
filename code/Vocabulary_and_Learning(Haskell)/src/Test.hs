@@ -23,14 +23,3 @@ data Corpus = Corpus
 parseVocabulary :: T.Text -> Corpus
 parseVocabulary file = let (header:rest) = T.lines file
                        in Corpus (T.drop 8 <$> rest) (read $ T.unpack $ T.drop 19 header)
-
-parseCorpus :: T.Text -> Corpus -> (M.Map T.Text Int, Int, Int)
-parseCorpus file voc = let Corpus w lines = parseFile file
-                           words          = countWords w
-                       in (mixVoc words, length $ M.toList words, lines)
-    where mixVoc :: M.Map T.Text Int -> M.Map T.Text Int
-          mixVoc mapWords = foldl' (\mapWords word ->
-                                         case M.lookup word mapWords of
-                                           Nothing -> M.insert word 0 mapWords
-                                           Just _ -> mapWords
-                                   ) mapWords (linesCorpus voc)
