@@ -59,16 +59,3 @@ writeCorpus vocCuantity (mapCorpus, numWords, lines)
                                 ]
         header = "Numero de documentos del corpus:" `mappend` (T.pack $ show lines) `mappend` "\n"
                  `mappend` "Numero de palabras del corpus:" `mappend` (T.pack $ show numWords) `mappend` "\n"
-
-parseFile :: T.Text -> Corpus
-parseFile file =
-  let lines = T.lines file
-      words = concatMap (T.drop 6
-                         >>> T.words
-                         >>> filter filterURL
-                         >>> concatMap (T.toLower >>> weirdWords))
-              (T.lines file)
-  in Corpus words (length lines)
-
-getNumDocuments :: T.Text -> Int
-getNumDocuments = length . T.lines
