@@ -34,28 +34,3 @@ parseCorpus file voc = let Corpus w lines = parseFile file
                                            Nothing -> M.insert word 0 mapWords
                                            Just _ -> mapWords
                                    ) mapWords (linesCorpus voc)
-
-
-writeCorpus :: Int -> (M.Map T.Text Int, Int, Int) -> T.Text
-writeCorpus vocCuantity (mapCorpus, numWords, lines)
-    = TB.toLazyText $ M.foldlWithKey'
-      (\acc word num ->
-          let prob = getProbabilityLog num vocCuantity numWords
-          in acc `mappend` TB.fromLazyText (format word num prob))
-      (TB.fromLazyText header)
-      mapCorpus
-  where format word frec prob = T.concat
-                                [ "Palabra:"
-                                , word
-                                , " Frec:"
-                                , (T.pack $ show frec)
-                                , " LogProb:"
-                                , (T.pack $ show prob)
-                                , "    Aux:: num  "
-                                , (T.pack $ show numWords)
-                                , "  voc "
-                                , (T.pack $ show vocCuantity)
-                                , "\n"
-                                ]
-        header = "Numero de documentos del corpus:" `mappend` (T.pack $ show lines) `mappend` "\n"
-                 `mappend` "Numero de palabras del corpus:" `mappend` (T.pack $ show numWords) `mappend` "\n"
